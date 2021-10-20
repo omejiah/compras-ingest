@@ -1,0 +1,31 @@
+steps:
+# Execute Compile and Package
+- name: maven:3-jdk-8
+  id: compile-code
+  entrypoint: mvn
+  args: ["clean","install", "-Dmaven.test.skip=true"]
+# Create Docker Image
+- name: 'gcr.io/cloud-builders/docker'
+  id: create-docker-image
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/${_IMAGE_NAME}', '--tag=gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID', '--tag=gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA' , '.']
+# Push Docker Image
+- name: 'gcr.io/cloud-builders/docker'
+  id: push-docker-image
+  args: [ 'push', 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}']
+# Update Compute Engine
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: deploy-image
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    set -x && \
+    gcloud compute ssh -q ${_GCE_NAME} --zone=${_ZONE} --internal-ip --command='/bin/bash  ${_DEPLOY_SCRIPT_PATH}/deployFeedMaster.sh ${_ENV} gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
+substitutions:
+    _IMAGE_NAME: compras-ingest
+    _GCE_NAME: instance-1
+    _ENV: sit
+    _ZONE: us-east4-c
+    _DEPLOY_SCRIPT_PATH: /opt/volume
+options:
+   substitution_option: 'ALLOW_LOOSE'
