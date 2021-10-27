@@ -66,4 +66,7 @@ public class ApplicationConfiguration {
 	
 	private List<OrderStatusBean> orderStatusBeanList;
 	
+
+	@Value("#{'${validShippingStatusList}'.split(',')}")
+	private List<String> shippingGroupStates;
 }
