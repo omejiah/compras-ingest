@@ -77,6 +77,7 @@ class ComprasIngestUtilsTest {
 		applicationConfiguration.setSkuDetailApikey("");
 		applicationConfiguration.setRestBaseURL("");
 		applicationConfiguration.setSkuDetailApiUrl("");
+		applicationConfiguration.setShippingGroupStates(new ArrayList<>());
 	}
 
 	@Test
