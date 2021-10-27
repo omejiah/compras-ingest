@@ -48,6 +48,10 @@ public class ComprasIngestUtils {
 		ingestItem.setId(orderIngest.getSourceShipId() + "-" + ingestItem.getSourceItemId());
 		ingestItem.setRemissionId(orderIngest.getOrderRef());
 		ingestItem.setCustomerId(orderIngest.getCustomerId());
+		if (applicationConfiguration.getShippingGroupStates().contains(ingestItem.getStatus())) {
+			ingestItem.setCurrentStatus(ComprasIngestConstants.STAGE1_STATUS);
+			ingestItem.setStage1Date(getformatedDateforStage(orderIngest.getPurchaseDate()));
+		}
 		log.info("End :: ComprasIngestUtils.updateItemBean()");
 		return ingestItem;
 	}

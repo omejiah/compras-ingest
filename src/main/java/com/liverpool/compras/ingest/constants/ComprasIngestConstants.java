@@ -68,4 +68,6 @@ public class ComprasIngestConstants {
 	public static final String SOURCE_ONLINE = "online";
 	public static final String SOURCE_PHYSICAL = "physical";
 	public static final String SOURCE_TLO = "tloUpdates";
+	
+	public static final String STAGE1_STATUS = "stage1";
 }
