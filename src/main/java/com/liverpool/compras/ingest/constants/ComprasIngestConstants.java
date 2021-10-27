@@ -70,4 +70,5 @@ public class ComprasIngestConstants {
 	public static final String SOURCE_TLO = "tloUpdates";
 	
 	public static final String STAGE1_STATUS = "stage1";
+	public static final String DATE_FORMAT_WITHOUT_YEAR = "dd 'de' MMMM";
 }
