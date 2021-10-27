@@ -1,5 +1,6 @@
 package com.liverpool.compras.ingest.configuration;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -42,4 +43,7 @@ public class ApplicationConfiguration {
 	
 	@Value("${purgingDays}")
 	private int purgingDays;
+	
+	@Value("#{'${validShippingStatusList}'.split(',')}")
+	private List<String> shippingGroupStates;
 }
