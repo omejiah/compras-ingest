@@ -3,6 +3,9 @@ package com.liverpool.compras.ingest.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,9 +51,9 @@ public class ComprasIngestUtils {
 		ingestItem.setId(orderIngest.getSourceShipId() + "-" + ingestItem.getSourceItemId());
 		ingestItem.setRemissionId(orderIngest.getOrderRef());
 		ingestItem.setCustomerId(orderIngest.getCustomerId());
-		if (applicationConfiguration.getShippingGroupStates().contains(ingestItem.getStatus())) {
+		if (applicationConfiguration.getShippingGroupStates().contains(orderIngest.getStatus())) {
 			ingestItem.setCurrentStatus(ComprasIngestConstants.STAGE1_STATUS);
-			ingestItem.setStage1Date(getformatedDateforStage(orderIngest.getPurchaseDate()));
+			ingestItem.setStage1Date(convertDateFormat(orderIngest.getPurchaseDate(), ComprasIngestConstants.DATE_FORMAT_WITHOUT_YEAR));
 		}
 		log.info("End :: ComprasIngestUtils.updateItemBean()");
 		return ingestItem;
@@ -418,5 +421,27 @@ public class ComprasIngestUtils {
 		cal.add(Calendar.DATE, - days);
 		log.info("End of addDaysToDate method ");
 		return cal.getTime();
+	}
+	
+	/**
+	 * This method is used to convert the date into required format
+	 * 
+	 * @param date
+	 * @param format
+	 * @return
+	 */
+	public String convertDateFormat(Date date, String format) {
+
+		log.debug("start of convertDateFormat method - for date - " + date + " date format - " + format);
+		String dateInSpanish = null;
+		if (date != null) {
+			LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+			Locale spanishLocale = new Locale("es", "ES");
+			dateInSpanish = localDate.format(DateTimeFormatter.ofPattern(format, spanishLocale));
+		}
+
+		log.debug("end of convertDateFormat method - converted date is - " + dateInSpanish);
+		return dateInSpanish;
 	}
 }
