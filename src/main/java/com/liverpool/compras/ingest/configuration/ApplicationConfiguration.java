@@ -46,8 +46,8 @@ public class ApplicationConfiguration {
 	@Value("${purgingDays}")
 	private int purgingDays;
 	
-	@Value("${tloOrderstatusUrl}")
-	private String tloOrderstatusUrl;
+	@Value("${orderStatusConfigServiceEndpoint}")
+	private String orderStatusConfigServiceEndpoint;
 	
 	@Value("${brand}")
 	private String brand;

@@ -20,39 +20,48 @@ import com.liverpool.compras.ingest.configuration.ApplicationConfiguration;
 import com.liverpool.compras.ingest.constants.ComprasIngestConstants;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This class is used to initialize and update orderStatusBeanList
+ * @author shakti
+ *
+ */
 @Configuration
 @Component
 @Slf4j
-public class TloUpdateService {
+public class OrderStatusConfigurationService {
 	
 	private ApplicationConfiguration applicationConfiguration;
 	private RestInvoker restInvoker;
 	
-	public TloUpdateService(RestInvoker restInvoker, ApplicationConfiguration applicationConfiguration) {
+	public OrderStatusConfigurationService(RestInvoker restInvoker, ApplicationConfiguration applicationConfiguration) {
 		super();
 		this.restInvoker = restInvoker;
 		this.applicationConfiguration = applicationConfiguration;
 	}
-	
+	/**
+	 * This method will be called at the time of
+	 * server startup and store Order Status
+	 * data in a global variable.
+	 */
 	@PostConstruct
 	public void tloUpdated() {
-		log.debug("getting the data from mongo for all properties");
+		log.info("Starting:: tloUpdated method");
+		log.debug("getting the Order Status data");
 		populateTloData();
+		log.info("Ending:: tloUpdated method");
 	}
 	
+	/**
+	 * This method will call orderStatusConfigServiceEndpoint and
+	 * store data in a global variable.
+	 */
 	public void populateTloData() {
-		Map<String, String> headersMap = new HashMap<>();
-		headersMap.put(ComprasIngestConstants.LP_AUTH_HEADER, applicationConfiguration.getLpAuthHeader());
-		headersMap.put(ComprasIngestConstants.BRAND, applicationConfiguration.getBrand());
-		headersMap.put(ComprasIngestConstants.LP_CORRELATION_ID, applicationConfiguration.getLpCorrelationId());
-		headersMap.put(ComprasIngestConstants.CHANNEL, applicationConfiguration.getChannel());
-		headersMap.put(ComprasIngestConstants.CONTENT_TYPE, applicationConfiguration.getContentType());
-
-		String url = applicationConfiguration.getTloOrderstatusUrl();
+		log.info("Starting:: populateTloData method");
+		String url = applicationConfiguration.getOrderStatusConfigServiceEndpoint();
 		JsonNode jsonNodes = null;
-		List<OrderStatusBean> orderStatusBeanList = new ArrayList();
+		List<OrderStatusBean> orderStatusBeanList = new ArrayList<>();
 		try {
-			jsonNodes = restInvoker.callServiceGet(url, headersMap);
+			jsonNodes = restInvoker.callServiceGet(url, getRequestHeader());
 			ArrayNode orderStatusList = (ArrayNode) jsonNodes.get("orderStatusList");
 
 			if (null != orderStatusList) {
@@ -71,6 +80,21 @@ public class TloUpdateService {
 		}catch (Exception e) {
 			log.error("Exception while populateTloData: {}", e.getMessage());
 		}
+		log.info("Ending:: populateTloData method");
 
+	}
+	
+	/**
+	 * prepare header for service call
+	 * @return headersMap
+	 */
+	public Map<String,String> getRequestHeader(){
+		Map<String, String> headersMap = new HashMap<>();
+		headersMap.put(ComprasIngestConstants.LP_AUTH_HEADER, applicationConfiguration.getLpAuthHeader());
+		headersMap.put(ComprasIngestConstants.BRAND, applicationConfiguration.getBrand());
+		headersMap.put(ComprasIngestConstants.LP_CORRELATION_ID, applicationConfiguration.getLpCorrelationId());
+		headersMap.put(ComprasIngestConstants.CHANNEL, applicationConfiguration.getChannel());
+		headersMap.put(ComprasIngestConstants.CONTENT_TYPE, applicationConfiguration.getContentType());
+		return headersMap;
 	}
 }
