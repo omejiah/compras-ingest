@@ -3,6 +3,9 @@ package com.liverpool.compras.ingest.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liverpool.compras.ingest.RestInvoker;
+import com.liverpool.compras.ingest.beans.OrderStatusBean;
 import com.liverpool.compras.ingest.configuration.ApplicationConfiguration;
 import com.liverpool.compras.ingest.constants.ComprasIngestConstants;
 import com.liverpool.compras.ingest.dao.beans.Item;
@@ -48,6 +53,10 @@ public class ComprasIngestUtils {
 		ingestItem.setId(orderIngest.getSourceShipId() + "-" + ingestItem.getSourceItemId());
 		ingestItem.setRemissionId(orderIngest.getOrderRef());
 		ingestItem.setCustomerId(orderIngest.getCustomerId());
+		if (applicationConfiguration.getShippingGroupStates().contains(orderIngest.getStatus())) {
+			ingestItem.setCurrentStatus(ComprasIngestConstants.STAGE1_STATUS);
+			ingestItem.setStage1Date(convertDateFormat(orderIngest.getPurchaseDate(), ComprasIngestConstants.DATE_FORMAT_WITHOUT_YEAR));
+		}
 		log.info("End :: ComprasIngestUtils.updateItemBean()");
 		return ingestItem;
 	}
@@ -323,16 +332,20 @@ public class ComprasIngestUtils {
 		log.debug("setBundleCommerceItemProperties :: " + somsSku.getSkuNo());
 
 		Date date = new Date();
-		Map<String, String> orderStatusMap = null;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// Invoking the rest service to get the order stage level
-		orderStatusMap = restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus,
-				HashMap.class);
 		String stageLevel=null;
-		if(null != orderStatusMap) {
-			stageLevel = orderStatusMap.get(ComprasIngestConstants.STAGELEVEL);
+		OrderStatusBean orderStatusBean = null;
+		if (applicationConfiguration.getOrderStatusBeanList() != null) {
+			orderStatusBean = applicationConfiguration.getOrderStatusBeanList().stream()
+					.filter(orderStatusBeans -> orderStatusBeans.getStatusName().equals(orderStatus.getStatusName())
+							&& orderStatusBeans.getStatusType().equals(orderStatus.getStatusType())
+							&& orderStatusBeans.getSomsNode().equals(orderStatus.getSomsNode())).collect(Collectors.toList()).get(0);
+		}
+
+		if(null != orderStatusBean) {
+			stageLevel = orderStatusBean.getStageLevel();
 			log.debug("stageLevel::" + stageLevel);
 		}
 		 
@@ -414,5 +427,27 @@ public class ComprasIngestUtils {
 		cal.add(Calendar.DATE, - days);
 		log.info("End of addDaysToDate method ");
 		return cal.getTime();
+	}
+	
+	/**
+	 * This method is used to convert the date into required format
+	 * 
+	 * @param date
+	 * @param format
+	 * @return
+	 */
+	public String convertDateFormat(Date date, String format) {
+
+		log.debug("start of convertDateFormat method - for date - " + date + " date format - " + format);
+		String dateInSpanish = null;
+		if (date != null) {
+			LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+			Locale spanishLocale = new Locale("es", "ES");
+			dateInSpanish = localDate.format(DateTimeFormatter.ofPattern(format, spanishLocale));
+		}
+
+		log.debug("end of convertDateFormat method - converted date is - " + dateInSpanish);
+		return dateInSpanish;
 	}
 }

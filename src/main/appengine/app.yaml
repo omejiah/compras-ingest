@@ -4,6 +4,7 @@ instance_class: F4
 service: compras-ingest
 inbound_services:
 - warmup
+automatic_scaling:
+   min_instances: 1
 env_variables:
   JAVA_USER_OPTS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
-  PORT: 8081

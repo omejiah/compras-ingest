@@ -95,4 +95,5 @@ public class Item {
 	private String customerId;
 	private List<String> associatedGiftItem;
 	private boolean hasMultipleOfferListing;
+	private String sellerOperatorId;
 }
