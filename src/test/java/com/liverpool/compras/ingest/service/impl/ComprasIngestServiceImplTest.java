@@ -1,17 +1,14 @@
 package com.liverpool.compras.ingest.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +41,7 @@ import com.liverpool.compras.ingest.dao.beans.Skus;
 import com.liverpool.compras.ingest.dao.beans.SomsOrderResBean;
 import com.liverpool.compras.ingest.repository.ComprasIngestAuditRepository;
 import com.liverpool.compras.ingest.repository.ComprasIngestItemRepository;
+import com.liverpool.compras.ingest.repository.ComprasIngestOrderRepository;
 import com.liverpool.compras.ingest.utils.ComprasIngestUtils;
 import com.mongodb.MongoWriteException;
 
@@ -77,10 +75,14 @@ class ComprasIngestServiceImplTest {
 	@MockBean
 	private ComprasIngestAuditRepository comprasIngestAuditRepository;
 
+	@MockBean
+	private ComprasIngestOrderRepository comprasIngestOrderRepository;
+	
 	@BeforeEach
 	public void setUp() {
 		comprasIngestServiceImpl = new ComprasIngestServiceImpl(mongoTemplate, ingestUtils, ingestConfigrations,
-				applicationConfiguration, comprasIngestItemRepository, comprasIngestAuditRepository);
+				applicationConfiguration, comprasIngestItemRepository, comprasIngestAuditRepository,
+				comprasIngestOrderRepository);
 	}
 
 	@Test
