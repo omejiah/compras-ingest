@@ -69,6 +69,12 @@ public class ComprasIngestConstants {
 	public static final String SOURCE_PHYSICAL = "physical";
 	public static final String SOURCE_TLO = "tloUpdates";
 	
+	
+	public static final String BRAND = "brand";
+	public static final String CHANNEL = "channel";
+	public static final String LP_CORRELATION_ID = "lp-correlation-id";
+	public static final String LP_AUTH_HEADER = "lp-auth-header";
+	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String STAGE1_STATUS = "stage1";
 	public static final String DATE_FORMAT_WITHOUT_YEAR = "dd 'de' MMMM";
 }

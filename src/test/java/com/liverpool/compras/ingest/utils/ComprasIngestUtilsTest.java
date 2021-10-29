@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liverpool.compras.ingest.RestInvoker;
+import com.liverpool.compras.ingest.beans.OrderStatusBean;
 import com.liverpool.compras.ingest.configuration.ApplicationConfiguration;
 import com.liverpool.compras.ingest.constants.ComprasIngestConstants;
 import com.liverpool.compras.ingest.dao.beans.Item;
@@ -276,6 +277,14 @@ class ComprasIngestUtilsTest {
 	  orderStatus.setStatusName("statusName");
 	  orderStatus.setStatusType("statusType"); 
 	  orderStatus.setSomsNode("somsNode");
+	  OrderStatusBean orderStatusBean = new OrderStatusBean();
+	  orderStatusBean.setStatusName("statusName");
+	  orderStatusBean.setStatusType("statusType"); 
+	  orderStatusBean.setSomsNode("somsNode");
+	  orderStatusBean.setStageLevel("stage1Date");
+	  List<OrderStatusBean> orderStatusBeanList = new ArrayList<OrderStatusBean>();
+	  orderStatusBeanList.add(orderStatusBean);
+	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
 	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
 	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
@@ -307,6 +316,14 @@ class ComprasIngestUtilsTest {
 	  orderStatus.setStatusName("statusName");
 	  orderStatus.setStatusType("statusType"); 
 	  orderStatus.setSomsNode("somsNode");
+	  OrderStatusBean orderStatusBean = new OrderStatusBean();
+	  orderStatusBean.setStatusName("statusName");
+	  orderStatusBean.setStatusType("statusType"); 
+	  orderStatusBean.setSomsNode("somsNode");
+	  orderStatusBean.setStageLevel("stage2Date");
+	  List<OrderStatusBean> orderStatusBeanList = new ArrayList<OrderStatusBean>();
+	  orderStatusBeanList.add(orderStatusBean);
+	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
 	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
 	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
@@ -338,6 +355,14 @@ class ComprasIngestUtilsTest {
 	  orderStatus.setStatusName("statusName");
 	  orderStatus.setStatusType("statusType"); 
 	  orderStatus.setSomsNode("somsNode");
+	  OrderStatusBean orderStatusBean = new OrderStatusBean();
+	  orderStatusBean.setStatusName("statusName");
+	  orderStatusBean.setStatusType("statusType"); 
+	  orderStatusBean.setSomsNode("somsNode");
+	  orderStatusBean.setStageLevel("stage3Date");
+	  List<OrderStatusBean> orderStatusBeanList = new ArrayList<OrderStatusBean>();
+	  orderStatusBeanList.add(orderStatusBean);
+	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
 	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
 	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
@@ -369,6 +394,14 @@ class ComprasIngestUtilsTest {
 	  orderStatus.setStatusName("statusName");
 	  orderStatus.setStatusType("statusType"); 
 	  orderStatus.setSomsNode("somsNode");
+	  OrderStatusBean orderStatusBean = new OrderStatusBean();
+	  orderStatusBean.setStatusName("statusName");
+	  orderStatusBean.setStatusType("statusType"); 
+	  orderStatusBean.setSomsNode("somsNode");
+	  orderStatusBean.setStageLevel("stage4Date");
+	  List<OrderStatusBean> orderStatusBeanList = new ArrayList<OrderStatusBean>();
+	  orderStatusBeanList.add(orderStatusBean);
+	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
 	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
 	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
@@ -376,5 +409,16 @@ class ComprasIngestUtilsTest {
 	  assertThat(comprasIngestUtils).isNotNull();
 	  
 	  }
+	  
+	  @Test
+	  void addDaysToDate() {
+		  assertThat(ComprasIngestUtils.addDaysToDate(new Date(),4)).isNotNull();
+	  }
+	  
+	  @Test
+	  void convertDateFormat() {
+		  assertThat(comprasIngestUtils.convertDateFormat(new Date(),"dd 'de' MMMM")).isNotNull();
+	  }
+	  
 	
 }

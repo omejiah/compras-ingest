@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.liverpool.compras.ingest.RestInvoker;
+import com.liverpool.compras.ingest.beans.OrderStatusBean;
 import com.liverpool.compras.ingest.configuration.ApplicationConfiguration;
 import com.liverpool.compras.ingest.constants.ComprasIngestConstants;
 import com.liverpool.compras.ingest.dao.beans.Item;
@@ -330,16 +332,20 @@ public class ComprasIngestUtils {
 		log.debug("setBundleCommerceItemProperties :: " + somsSku.getSkuNo());
 
 		Date date = new Date();
-		Map<String, String> orderStatusMap = null;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// Invoking the rest service to get the order stage level
-		orderStatusMap = restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus,
-				HashMap.class);
 		String stageLevel=null;
-		if(null != orderStatusMap) {
-			stageLevel = orderStatusMap.get(ComprasIngestConstants.STAGELEVEL);
+		OrderStatusBean orderStatusBean = null;
+		if (applicationConfiguration.getOrderStatusBeanList() != null) {
+			orderStatusBean = applicationConfiguration.getOrderStatusBeanList().stream()
+					.filter(orderStatusBeans -> orderStatusBeans.getStatusName().equals(orderStatus.getStatusName())
+							&& orderStatusBeans.getStatusType().equals(orderStatus.getStatusType())
+							&& orderStatusBeans.getSomsNode().equals(orderStatus.getSomsNode())).collect(Collectors.toList()).get(0);
+		}
+
+		if(null != orderStatusBean) {
+			stageLevel = orderStatusBean.getStageLevel();
 			log.debug("stageLevel::" + stageLevel);
 		}
 		 

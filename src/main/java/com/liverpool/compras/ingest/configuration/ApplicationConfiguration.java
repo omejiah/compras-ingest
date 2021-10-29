@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import com.liverpool.compras.ingest.beans.OrderStatusBean;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,6 +46,27 @@ public class ApplicationConfiguration {
 	@Value("${purgingDays}")
 	private int purgingDays;
 	
+	@Value("${orderStatusConfigServiceEndpoint}")
+	private String orderStatusConfigServiceEndpoint;
+	
+	@Value("${brand}")
+	private String brand;
+	
+	@Value("${channel}")
+	private String channel;
+	
+	@Value("${lp_correlation_id}")
+	private String lpCorrelationId;
+	
+	@Value("${lp_auth_header}")
+	private String lpAuthHeader;
+	
+	@Value("${content_Type}")
+	private String contentType;
+	
+	private List<OrderStatusBean> orderStatusBeanList;
+	
+
 	@Value("#{'${validShippingStatusList}'.split(',')}")
 	private List<String> shippingGroupStates;
 }
