@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,6 +32,7 @@ import com.liverpool.compras.ingest.dao.beans.Skus;
 import com.liverpool.compras.ingest.dao.beans.SomsOrderResBean;
 import com.liverpool.compras.ingest.repository.ComprasIngestAuditRepository;
 import com.liverpool.compras.ingest.repository.ComprasIngestItemRepository;
+import com.liverpool.compras.ingest.repository.ComprasIngestOrderRepository;
 import com.liverpool.compras.ingest.service.ComprasIngestService;
 import com.liverpool.compras.ingest.utils.ComprasIngestUtils;
 import com.mongodb.MongoWriteException;
@@ -48,11 +50,13 @@ public class ComprasIngestServiceImpl implements ComprasIngestService {
 	private ApplicationConfiguration applicationConfiguration;
 	private ComprasIngestItemRepository comprasIngestItemRepository;
 	private ComprasIngestAuditRepository comprasIngestAuditRepository;
+	private ComprasIngestOrderRepository comprasIngestOrderRepository;
 
 	public ComprasIngestServiceImpl(MongoTemplate mongoTemplate, ComprasIngestUtils ingestUtils,
 			ComprasIngestConfigrations ingestConfigrations, ApplicationConfiguration applicationConfiguration,
 			ComprasIngestItemRepository comprasIngestItemRepository,
-			ComprasIngestAuditRepository comprasIngestAuditRepository) {
+			ComprasIngestAuditRepository comprasIngestAuditRepository,
+			ComprasIngestOrderRepository comprasIngestOrderRepository) {
 		super();
 		this.mongoTemplate = mongoTemplate;
 		this.ingestUtils = ingestUtils;
@@ -60,12 +64,19 @@ public class ComprasIngestServiceImpl implements ComprasIngestService {
 		this.applicationConfiguration = applicationConfiguration;
 		this.comprasIngestItemRepository = comprasIngestItemRepository;
 		this.comprasIngestAuditRepository = comprasIngestAuditRepository;
+		this.comprasIngestOrderRepository = comprasIngestOrderRepository;
 	}
 
 	@Override
 	public void createOrder(Order orderIngestBean) {
 		log.info("Start :: ComprasIngestServiceImpl.createOrder()");
 		try {
+			Optional<Order> orderItem = comprasIngestOrderRepository.findById(orderIngestBean.getSourceShipId());
+			if (orderItem.isPresent()) {
+				log.debug("Deleting the old open pay order as open pay payment updare received ::",
+						orderIngestBean.getSourceShipId());
+				comprasIngestOrderRepository.delete(orderItem.get());
+			}
 			Order order = ingestUtils.updateOrderBean(orderIngestBean);
 			mongoTemplate.save(order);
 		} catch (MongoWriteException me) {
