@@ -45,10 +45,10 @@ public class OrderStatusConfigurationService {
 	 */
 	@PostConstruct
 	public void tloUpdated() {
-		log.info("Starting:: tloUpdated method");
+		log.debug("Starting:: tloUpdated method");
 		log.debug("getting the Order Status data");
 		populateTloData();
-		log.info("Ending:: tloUpdated method");
+		log.debug("Ending:: tloUpdated method");
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class OrderStatusConfigurationService {
 	 * store data in a global variable.
 	 */
 	public void populateTloData() {
-		log.info("Starting:: populateTloData method");
+		log.debug("Starting:: populateTloData method");
 		String url = applicationConfiguration.getOrderStatusConfigServiceEndpoint();
 		JsonNode jsonNodes = null;
 		List<OrderStatusBean> orderStatusBeanList = new ArrayList<>();
@@ -80,7 +80,7 @@ public class OrderStatusConfigurationService {
 		}catch (Exception e) {
 			log.error("Exception while populateTloData: {}", e.getMessage());
 		}
-		log.info("Ending:: populateTloData method");
+		log.debug("Ending:: populateTloData method");
 
 	}
 	

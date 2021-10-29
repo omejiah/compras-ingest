@@ -26,8 +26,8 @@ public class OrderStatusConfigUpdateScheduler {
 	 */
 	@Scheduled(fixedRate = 300000)
 	public void updateTLOTask() {
-		log.info("Start:: TLOUpatedScheduler.updateTLOTask()");
+		log.debug("Start:: OrderStatusConfigUpdateScheduler.updateTLOTask()");
 		orderStatusConfigurationService.populateTloData();
-		log.info("End:: TLOUpatedScheduler.updateTLOTask()");
+		log.debug("End:: OrderStatusConfigUpdateScheduler.updateTLOTask()");
 	}
 }
