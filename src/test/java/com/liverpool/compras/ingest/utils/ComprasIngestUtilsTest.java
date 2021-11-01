@@ -286,8 +286,8 @@ class ComprasIngestUtilsTest {
 	  orderStatusBeanList.add(orderStatusBean);
 	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
-	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
-	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
+	  applicationConfiguration.setOrderStatusConfigServiceEndpoint("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
+	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusConfigServiceEndpoint(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
 	  comprasIngestUtils.setBundleCommerceItemProperties(orderStatus, item, somsSku, true); 
 	  assertThat(comprasIngestUtils).isNotNull();
 	  
@@ -325,8 +325,8 @@ class ComprasIngestUtilsTest {
 	  orderStatusBeanList.add(orderStatusBean);
 	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
-	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
-	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
+	  applicationConfiguration.setOrderStatusConfigServiceEndpoint("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
+	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusConfigServiceEndpoint(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
 	  comprasIngestUtils.setBundleCommerceItemProperties(orderStatus, item, somsSku, true); 
 	  assertThat(comprasIngestUtils).isNotNull();
 	  
@@ -364,8 +364,8 @@ class ComprasIngestUtilsTest {
 	  orderStatusBeanList.add(orderStatusBean);
 	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
-	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
-	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
+	  applicationConfiguration.setOrderStatusConfigServiceEndpoint("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
+	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusConfigServiceEndpoint(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
 	  comprasIngestUtils.setBundleCommerceItemProperties(orderStatus, item, somsSku, true); 
 	  assertThat(comprasIngestUtils).isNotNull();
 	  
@@ -403,8 +403,8 @@ class ComprasIngestUtilsTest {
 	  orderStatusBeanList.add(orderStatusBean);
 	  applicationConfiguration.setOrderStatusBeanList(orderStatusBeanList);
 	  applicationConfiguration.setRestBaseURL("https://petstore.swagger.io/");
-	  applicationConfiguration.setOrderStatusService("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
-	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusService(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
+	  applicationConfiguration.setOrderStatusConfigServiceEndpoint("http://192.168.0.132:7003/public/v1/configuration/getOrderStatusConfiguration");
+	  when(restInvoker.callServicePost(applicationConfiguration.getOrderStatusConfigServiceEndpoint(), orderStatus, HashMap.class)).thenReturn(orderStatusMap);
 	  comprasIngestUtils.setBundleCommerceItemProperties(orderStatus, item, somsSku, true); 
 	  assertThat(comprasIngestUtils).isNotNull();
 	  
