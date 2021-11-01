@@ -15,7 +15,7 @@ public class OpenPayPayment {
 
 	private String estatus;
 	private String openPayReference;
-	private Date expiryDate;
+	private Date openPayExpiryDateAndTime;
 	private String paymentMethod;
 	private String authNumber;
 	

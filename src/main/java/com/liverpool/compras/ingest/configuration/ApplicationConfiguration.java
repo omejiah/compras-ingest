@@ -39,9 +39,6 @@ public class ApplicationConfiguration {
 
 	@Value("${endDayRangeSL}")
 	private int endDayRangeSL;
-
-	@Value("${orderStatusService}")
-	private String orderStatusService;
 	
 	@Value("${purgingDays}")
 	private int purgingDays;
