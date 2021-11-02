@@ -8,6 +8,9 @@ automatic_scaling:
    min_instances: 1
 env_variables:
   JAVA_USER_OPTS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+network:
+  name: corp-net-dev-vpc-1
 vpc_access_connector:
   name: >-
-   projects/corp-dev-net-shared/locations/us-east4/connectors/corp-net-dev-tkp-svrls-1
+    projects/corp-dev-net-shared/locations/us-east4/connectors/corp-net-dev-tkp-svrls-1
+  vpcAccessConnectorEgressSetting: PRIVATE_IP_RANGES
